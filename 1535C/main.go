@@ -4,65 +4,49 @@ import "fmt"
 
 func main() {
 	var t int
-	fmt.Scanf("%d\n",&t)
+	fmt.Scanf("%d\n", &t)
 	for i := 0; i < t; i++ {
 		var s string
 		result := int64(0)
-		fmt.Scanf("%s\n",&s)
-		var tail [200002]int64
+		tail := int64(0)
+		q := -1
+		qcount := 0
+		fmt.Scanf("%s\n", &s)
 		for j := 0; j < len(s); j++ {
-			inc := int64(0)
-			q := -1
-			qcount := 0
-
-			inc =
-
-			for h := j; h >= 0; h-- {
-				if h == j {
-					if s[h] == '?' {
-						inc++
-						q = h
-						qcount++
-					} else {
-						inc++
-					}
-					continue
+			if s[j] == '?' {
+				if q < 0 {
+					q = j
+					qcount++
+					tail = tail + 1
+				} else {
+					qcount++
+					tail = tail + 1
 				}
-
-				if q >= 0 {
-					if s[h] == '?' {
-						qcount++
-						inc++
+			} else {
+				if q < 0 {
+					if j == 0 {
+						tail = 1
+					} else if s[j] == s[j-1] {
+						tail = 1
 					} else {
-						if q == j {
-							qcount++
-							inc++
-						} else {
-							if s[q+1] == s[h] && qcount % 2 == 1 {
-								inc++
-							} else if s[q+1] != s[h] && qcount % 2 ==0 {
-								inc++
-							} else {
-								break
-							}
-						}
-						qcount = 0
-						q = -1
+						tail = tail + 1
 					}
 				} else {
-					if s[h] == '?' {
-						inc++
-						q = h
-						qcount++
-					} else if s[h] != s[h+1] {
-						inc++
+					if q == 0 {
+						tail = tail + 1
+					} else if s[q-1] == s[j] && qcount%2 == 1 {
+						tail = tail + 1
+					} else if s[q-1] != s[j] && qcount%2 == 0 {
+						tail = tail + 1
 					} else {
-						break
+						tail = int64(qcount) + 1
 					}
+					q = -1
+					qcount = 0
 				}
 			}
-			result += inc
+			result += tail
 		}
-		fmt.Printf("%d\n",result)
+		fmt.Printf("%d\n", result)
 	}
 }
